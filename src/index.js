@@ -8,12 +8,15 @@ const filmInfo = document.getElementById("film-info")
 const showTime = document.getElementById("showtime")
 const remainingTickets = document.getElementById("ticket-num")
 const divCard = document.getElementsByClassName("card")[0]
+const filmItem = document.getElementsByClassName("film item")[1]
+
 
 
 
 document.addEventListener("DOMContentLoaded", () => {
     getFilm()
     handleButton()
+    getAllFilms()
 })
 
 const getFilm = () => {
@@ -35,7 +38,7 @@ const renderMovie = (movie) => {
 const handleButton = () => {
     divCard.addEventListener("click", e => {
         if(e.target.className === "ui orange button"){
-            if(remainingTickets > 0){
+            if(parseInt(remainingTickets.innerText) > 0){
             parsedTickets = parseInt(remainingTickets.innerText)
             ticketsLeft = parsedTickets - 1
             remainingTickets.innerText = ticketsLeft
@@ -56,6 +59,22 @@ const handleButton = () => {
             })
             .then(res => res.json())
             .then(getFilm)
+            }
         }
+    })
+}
+
+const getAllFilms = () => {
+    fetch('http://localhost:3000/films')
+    .then(res => res.json())
+    .then(renderMovies)
+}
+
+const renderMovies = (movies) => {
+    movies.forEach(movie => {
+        const movieName = document.createElement("li")
+        movieName.innerText = movie.title
+        filmItem.appendChild(movieName)
+        
     })
 }
