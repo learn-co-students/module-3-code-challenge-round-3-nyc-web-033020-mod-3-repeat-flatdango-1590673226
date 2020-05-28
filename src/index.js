@@ -8,7 +8,10 @@ const filmInfo = document.getElementById("film-info")
 const showTime = document.getElementById("showtime")
 const remainingTickets = document.getElementById("ticket-num")
 const divCard = document.getElementsByClassName("card")[0]
+const menu = document.getElementsByClassName("film item")[0]
 const filmItem = document.getElementsByClassName("film item")[1]
+const poster = document.getElementById("poster")
+const button = document.getElementsByClassName("ui orange button")[0]
 
 
 
@@ -18,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
     handleButton()
     getAllFilms()
     displayNewMovie()
+    displaySoldOutMovies()
 })
 
 const getFilm = () => {
@@ -29,6 +33,8 @@ const getFilm = () => {
 const renderMovie = (movie) => {
     divCard.innerHTMl = ""
     title.innerText = movie.title
+    poster.src = movie.poster
+    button.dataset.id = movie.id
     runtime.innerText = `${movie.runtime} minutes`
     filmInfo.innerText = movie.description
     showTime.innerText = movie.showtime
@@ -50,7 +56,9 @@ const handleButton = () => {
             const currentTicketsNum = currentTicketsNode.dataset.num
             const parsedCurrentTickets = parseInt(currentTicketsNum)
             const newTickets = parsedCurrentTickets + 1
-            fetch("http://localhost:3000/films/1", {
+            const id = button.dataset.id
+          
+            fetch(`http://localhost:3000/films/${id}`, {
                 method: "PATCH",
                 headers: {
                     'Content-Type': 'application/json',
@@ -59,7 +67,7 @@ const handleButton = () => {
                 body: JSON.stringify({tickets_sold: newTickets})
             })
             .then(res => res.json())
-            .then(getFilm)
+            .then(newMovie)
             }
         }
     })
@@ -85,9 +93,21 @@ const displayNewMovie = () => {
     document.addEventListener("click", e => {
         if(e.target.className === "movieName") {
             id = e.target.dataset.id
-            fetch(`http://localhost:3000/films/${id}`)
-            .then(res => res.json())
-            .then(renderMovie)
+           newMovie()
         }
     })
+}
+
+
+const newMovie = () => {
+    fetch(`http://localhost:3000/films/${id}`)
+    .then(res => res.json())
+    .then(renderMovie)
+}
+
+
+displaySoldOutMovies = () => {
+    if(remainingTickets.innerText === "0"){
+        
+    }
 }
