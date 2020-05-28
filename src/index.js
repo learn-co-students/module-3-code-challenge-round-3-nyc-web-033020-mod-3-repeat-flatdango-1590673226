@@ -17,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     getFilm()
     handleButton()
     getAllFilms()
+    displayNewMovie()
 })
 
 const getFilm = () => {
@@ -73,8 +74,20 @@ const getAllFilms = () => {
 const renderMovies = (movies) => {
     movies.forEach(movie => {
         const movieName = document.createElement("li")
+        movieName.className = "movieName"
+        movieName.dataset.id = movie.id
         movieName.innerText = movie.title
         filmItem.appendChild(movieName)
-        
+    })
+}
+
+const displayNewMovie = () => {
+    document.addEventListener("click", e => {
+        if(e.target.className === "movieName") {
+            id = e.target.dataset.id
+            fetch(`http://localhost:3000/films/${id}`)
+            .then(res => res.json())
+            .then(renderMovie)
+        }
     })
 }
