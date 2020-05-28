@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
     handleButton()
     getAllFilms()
     displayNewMovie()
-    displaySoldOutMovies()
 })
 
 const getFilm = () => {
@@ -103,11 +102,4 @@ const newMovie = () => {
     fetch(`http://localhost:3000/films/${id}`)
     .then(res => res.json())
     .then(renderMovie)
-}
-
-
-displaySoldOutMovies = () => {
-    if(remainingTickets.innerText === "0"){
-        
-    }
 }
